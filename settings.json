@@ -1,6 +1,6 @@
 {
     "first_run": 0,
-    "state": 1,
+    "state": 0,
     "windowed_res_x": 800,
     "windowed_res_Y": 600,
     "fullscreen": 1,
@@ -14,6 +14,6 @@
     "bg_star_radius_deviation": 10,
     "start_template_index": 1,
     "autosave_on_exit": 1,
-    "autoload_on_start": 0,
+    "autoload_on_start": 1,
     "max_messages_in_log": 16
 }

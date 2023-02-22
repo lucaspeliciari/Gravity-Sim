@@ -77,16 +77,11 @@ def main():
             engine.render_splash_screen()
 
         elif game.state == SIMULATION:
-            if not TEST_MODE or engine.timer < 8:
-                engine.tick(sim)
+            engine.tick(sim)
 
-                if not sim.paused:
-                    engine.calculate_physics(sim)
-                engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
-            else:
-                avg_fps = sum(engine.fps_list) / len(engine.fps_list)
-                print(f'Average of {avg_fps:.2f} fps')
-                break
+            if not sim.paused:
+                engine.calculate_physics(sim)
+            engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
 
         pygame.display.update()
 

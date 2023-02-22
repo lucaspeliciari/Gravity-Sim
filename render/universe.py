@@ -50,11 +50,6 @@ def draw_ui(screen, mouse_position, sim, engine):
         screen.blit(engine.font.render(text, True, WHITE),
                     (engine.screen_width - text_width - 5, engine.screen_height - (i + 1) * text_height))
 
-    # DEBUG
-    text = f'{engine.clock.get_fps():.2f} fps'
-    text_width, text_height = engine.font.size(text)
-    screen.blit(engine.font.render(text, True, WHITE), (engine.screen_width // 2 - text_width // 2, text_height))
-
 
 # ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 
@@ -123,6 +118,7 @@ def draw_bodies(screen,
         perspective_scaling = lerp(0.5, 2, (z + (Z_SCALING / 2)) / Z_SCALING)  # increases or decreases radius based on distance do camera
         r *= perspective_scaling
 
+        body.projected_z = z  # merge with projected_data into projected_position
         body.projected_data = (x, y, r)  # r depends on zoom, standardize and improve name
 
         body.projected_position = (x, y, z)

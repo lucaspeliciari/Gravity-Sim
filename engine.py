@@ -52,8 +52,6 @@ class Engine:
         self.octree_update_timer = 0
         self.simulation_timer = 0
 
-        self.fps_list = []
-
         self.scale = sim.scale  # SCALE
 
         self.font = pygame.font.SysFont("monospace", 15)
@@ -179,9 +177,6 @@ class Engine:
     def tick(self, sim):
         self.timescale = sim.timescale  # terrible but it works
         self.clock.tick(FRAMERATE)
-
-        if TEST_MODE and self.timer > 1:  # first few frames run at 60 so ignore them
-            self.fps_list.append(self.clock.get_fps())
 
         if not sim.paused:
             self.simulation_timer += (self.clock.get_time() / 1000) * self.timescale

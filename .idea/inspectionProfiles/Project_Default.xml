@@ -1,0 +1,35 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyStubPackagesAdvertiser" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="PyQt5-stubs==5.15.6.0" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="app.App.tagSearchInput" />
+          <option value="app.App.gridLayout" />
+          <option value="app.App.pushButtonPhoto" />
+          <option value="app.App.pushButtonFolder" />
+          <option value="app.App.pushButtonTerminal" />
+          <option value="app.Terminal.terminalInput" />
+          <option value="app.Terminal.terminalOutput" />
+          <option value="app.Adder.imageLabel" />
+          <option value="app.Adder.pushButtonAdd" />
+          <option value="app.Adder.lineEdit" />
+          <option value="app.Adder.labelPhotoCount" />
+          <option value="app.Adder.pushButtonAddAll" />
+          <option value="app.Loading.progressBar" />
+          <option value="app.Loading.label" />
+          <option value="app.App.pushButtonRefresh" />
+          <option value="PyQt5.QtWidgets.statusBar.showMessage" />
+          <option value="str.description" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

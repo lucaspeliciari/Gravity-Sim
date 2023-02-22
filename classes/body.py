@@ -45,6 +45,8 @@ class Body:
         self.influenced_by_gravity = influenced_by_gravity
         self.can_collide = can_collide
 
+        self.collisions_with_bodies = []
+
         self.physics_interval_counter = 0
         self.trail = [(self.x, self.y, self.z)]
 

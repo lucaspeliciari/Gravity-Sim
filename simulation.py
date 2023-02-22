@@ -169,10 +169,15 @@ class Simulation:
                 random_index += 1
 
         random_body = Body(random_body_data(random_index))
+        random_body.collisions_with_bodies = [0 for x in self.bodies]
         if self.orbit_first_body:
             random_body.circle_of_influence = [self.bodies[0]]
         else:
             random_body.circle_of_influence = [x for x in self.bodies]
+
+        # add a new collision index for this new random body in pre-existing bodies
+        for body in self.bodies:
+            body.collisions_with_bodies.append(0)
 
         if self.orbit_first_body:
             random_body.velocity_x, random_body.velocity_y, random_body.velocity_z = get_orbital_velocities(random_body)

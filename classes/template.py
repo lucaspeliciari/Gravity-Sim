@@ -46,11 +46,10 @@ class Template:
 
         self.set_up_universe()
 
-        self.bodies = []
-
     def set_up_universe(self):
-        self.bodies = self.generate_bodies()
-        self.generate_random_bodies()
+        body_objects = self.generate_bodies()
+        self.generate_random_bodies(body_objects)
+        self.generate_collision_lists(body_objects)
         self.generate_circles_of_influence()
 
     def generate_bodies(self):
@@ -75,12 +74,21 @@ class Template:
             body_objects.append(body)
         return body_objects
 
-    def generate_random_bodies(self):
+    def generate_random_bodies(self, body_objects):
         for i in range(self.number_random_bodies):
             data = random_body_data(i + 1)
             body = Body(data)
-            self.bodies.append(body)
+            body_objects.append(body)
         # return body_objects
+
+    # these lists are used to only destroy body if there are x collisions in a row
+    # avoids always destroying bodies when they touch
+    # always destroying is more realistic, but elastic collisions are more fun
+    # I will probably remove this (it's more trouble than it's worth)
+    def generate_collision_lists(self, body_objects):
+        self.bodies = body_objects
+        for body in self.bodies:
+            body.collisions_with_bodies = [0 for x in range(len(self.bodies))]
 
     # each body is only affected by the gravity of other bodies in its circle of influence
     def generate_circles_of_influence(self):

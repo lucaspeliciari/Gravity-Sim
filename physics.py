@@ -4,10 +4,8 @@ from functions import *
 from vars import universe_boundary
 
 
-# use Vector3!
 
-def update_acceleration(bodies):  # accel in m/s²
-
+def update_acceleration(bodies):  # accel in m/s²  
     for body in bodies:
         force_summation_x = 0
         force_summation_y = 0
@@ -80,31 +78,69 @@ def check_boundaries(bodies,  # disabled because it is VERY broken!
             body.velocity_z *= -1
 
 
-def check_body_collision(sim,  # SLOW, test
+def check_body_collision(sim,  # SLOW
                          radius_scale: int = RADIUS_SCALE
                          ):
     to_remove = []
+    ignore_list = []  # do not use this! use j=i+1 in the second for
     for i, body in enumerate(sim.bodies):
         if body.can_collide:
-            # for j, other_body in enumerate([x for x in sim.bodies if x not in ignore_list and body != x]):
-            for j in range(i+1, len(sim.bodies)):
-                dx, dy, dz = get_distances(body, sim.bodies[j], PIXELS)
+            # for j, other_body in enumerate([x for x in sim.bodies if x != body]):
+            for j, other_body in enumerate([x for x in sim.bodies if x not in ignore_list and body != x]):
+                dx, dy, dz = get_distances(body, other_body, PIXELS)
                 d, _ = components_to_vector(dx, dy, dz)
 
                 # Wrong due to perspective scaling, so fix
-                sum_of_radii = (body.radius + sim.bodies[j].radius) / radius_scale
+                sum_of_radii = (body.radius + other_body.radius) / radius_scale
 
                 if d < sum_of_radii:  # COLLIDED
-                    if body.mass < sim.bodies[j].mass:
-                        to_remove.append(i)
-                        sim.bodies[j].mass += body.mass / 5  # 5 otherwise it gets way too big
-                        sim.bodies[j].radius += pow(pow(body.radius, 3) + pow(sim.bodies[j].radius, 3), (1 / 3)) / 5  # 5 otherwise it gets way too big
-                    else:
-                        to_remove.append(j)
-                        sim.bodies[i].mass += body.mass / 5  # 5 otherwise it gets way too big
-                        sim.bodies[i].radius += pow(pow(body.radius, 3) + pow(sim.bodies[i].radius, 3), (1 / 3)) / 5  # 5 otherwise it gets way too big
+                    if body.collisions_with_bodies[j] > 5:  # DESTROY
+                        if body.mass < other_body.mass:
+                            to_remove.append(i)
+                            other_body.mass += body.mass
+                            other_body.radius += pow(pow(body.radius, 3) + pow(other_body.radius, 3),
+                                                     (1 / 3))  # cube roots might be too slow
+                    else:  # BOUNCE, terrible, does not work, delete
+                        body_velocity, other_body_velocity = elastic_collision(body, other_body)
+                        body.velocity_x, body.velocity_y, body.velocity_z = body_velocity[0], body_velocity[1], \
+                                                                            body_velocity[2]
+                        other_body.velocity_x, other_body.velocity_y, other_body.velocity_z = other_body_velocity[0], \
+                                                                                              other_body_velocity[1], \
+                                                                                              other_body_velocity[2]
+                        body_velocity_module, body_velocity_angle = components_to_vector(body.velocity_x,
+                                                                                         body.velocity_y,
+                                                                                         body.velocity_z)
 
-    sim.remove_body(to_remove)
+                        angle_xy = atan2(dy, dx)  # regular screen plane
+                        angle_yz = atan2(dz, dy)  # inclination of regular screen plane
+                        body_velocity_angle = 2 * angle_xy + body_velocity_angle  # angle for XY seems correct
+
+                        body.velocity_x = cos(body_velocity_angle) * body_velocity_module
+                        body.velocity_y = sin(body_velocity_angle) * body_velocity_module
+
+                        unstuck_angle = 0.5 * pi + body_velocity_angle
+
+                        if body.can_move:
+                            # body.velocity_module = v1
+                            body.x += cos(unstuck_angle)
+                            body.y += sin(unstuck_angle)
+                        # if other_body.can_move:
+                        # other_body.velocity_module = v2
+                        # other_body.x -= cos(unstuck_angle)
+                        # other_body.y += sin(unstuck_angle)
+
+                        # body.collisions_with_bodies[j] += 1  # turn this on after finishing collisions (or remove altogether if possible)
+                        # other_body.collisions_with_bodies[j] += 1
+
+                else:
+                    collision_value = body.collisions_with_bodies[j]
+                    collision_value -= 1
+                    collision_value = max(0, collision_value)
+                    body.collisions_with_bodies[j] = collision_value
+        ignore_list.append(body)
+
+    if len(to_remove) > 0:
+        sim.remove_body(to_remove)
 
 
 def elastic_collision(body: Body,  # maybe remove
