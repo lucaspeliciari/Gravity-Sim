@@ -14,6 +14,6 @@
     "bg_star_radius_deviation": 10,
     "start_template_index": 1,
     "autosave_on_exit": 1,
-    "autoload_on_start": 1,
+    "autoload_on_start": 0,
     "max_messages_in_log": 16
 }

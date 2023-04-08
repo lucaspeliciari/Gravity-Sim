@@ -4,7 +4,6 @@ from functions import *
 from vars import universe_boundary
 
 
-
 def update_acceleration(bodies):  # accel in m/s²  
     for body in bodies:
         force_summation_x = 0

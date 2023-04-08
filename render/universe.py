@@ -33,6 +33,10 @@ def draw_ui(screen, mouse_position, sim, engine):
                   f'Current frame: {engine.current_frame}',
                   f'Timescale: {engine.timescale:.0f}',
                   ]
+
+    if engine.recording_index < len(engine.recording):
+        texts_left.append(f'Recording frame: {engine.recording_index} / {len(engine.recording)}')
+
     for i, text in enumerate(texts_left):
         text_width, text_height = engine.font.size(text)
         screen.blit(engine.font.render(text, True, WHITE), (10, engine.screen_height - (i + 1) * text_height))
@@ -50,6 +54,12 @@ def draw_ui(screen, mouse_position, sim, engine):
         screen.blit(engine.font.render(text, True, WHITE),
                     (engine.screen_width - text_width - 5, engine.screen_height - (i + 1) * text_height))
 
+
+def draw_recording_message(screen, engine, recording_time):
+    screen.fill(BLACK)
+    text = f'RECORDING {engine.timer:.2f} / {recording_time} seconds'
+    text_width, text_height = engine.large_font.size(text)
+    screen.blit(engine.large_font.render(text, True, WHITE), (engine.screen_width // 2 - text_width // 2, engine.screen_height // 2))
 
 # ——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
 

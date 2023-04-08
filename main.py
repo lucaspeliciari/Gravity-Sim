@@ -26,10 +26,14 @@ def main():
     bg_stars_radius = (settings['bg_star_avg_radius'], settings['bg_star_radius_deviation'])
     body_trail_settings = (settings['trail_interval'], settings['max_trail_length'], settings['min_distance_to_trail'])
 
-    sim = Simulation(templates, templates_index, bg_stars_radius, settings['autosave_on_exit'])
+    sim = Simulation(templates, templates_index, bg_stars_radius, settings['autosave_on_exit'])  # , True
     engine = Engine(sim, window_size, settings['fullscreen'], body_trail_settings, settings['max_messages_in_log'])
     engine.set_octrees(sim)
-    game = Game(state=settings['state'])
+    game = Game(state=REPLAY)
+
+    if game.state == REPLAY:
+        sim.is_recording = True
+
     game.sim = sim
 
     red_font_size = 17
@@ -63,7 +67,6 @@ def main():
 
     # EVENTS
     pygame.time.set_timer(pygame.USEREVENT, 200)  # updates octrees every 200 milliseconds
-
     while game.running:
         events = pygame.event.get()
         mouse_position = pygame.mouse.get_pos()
@@ -81,7 +84,24 @@ def main():
 
             if not sim.paused:
                 engine.calculate_physics(sim)
+
             engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
+
+        elif game.state == REPLAY:  # TODO make controls (panning, rotation etc) work during recording
+            engine.tick(sim)        # TODO then make it possible to restart recording in a loop
+
+            if sim.is_recording:
+                engine.calculate_physics(sim)
+                engine.record_frame(sim)
+            else:
+                engine.read_recording(sim)
+                engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
+
+                if engine.recording_index == 1:
+                    engine.messenger.add('Playing recording', 3)
+                elif engine.recording_index == len(engine.recording):
+                    game.state = SIMULATION
+                    engine.messenger.add('Recording has ended, simulation mode is now active', 3)
 
         pygame.display.update()
 

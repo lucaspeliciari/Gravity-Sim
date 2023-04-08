@@ -1,3 +1,4 @@
+from copy import deepcopy
 from math import copysign
 
 import pygame.display
@@ -18,6 +19,8 @@ from render.splash_screen import *
 from render.trees import *
 from render.universe import *
 
+
+RECORDING_TIME = 10
 
 class Engine:
     def __init__(self,
@@ -79,6 +82,9 @@ class Engine:
         self.template_title_timer = TEMPLATE_TITLE_TIME_ON_SCREEN
 
         self.messenger = Messenger(max_messages_in_log)
+
+        self.recording = []
+        self.recording_index = 0
 
     def reset_values(self):
         self.timescale = 0
@@ -188,6 +194,11 @@ class Engine:
 
         self.current_frame += 1
 
+
+        if sim.is_recording and self.timer > RECORDING_TIME:
+            sim.is_recording = False
+            print(RECORDING_TIME, 'seconds and', len(self.recording), 'frames recorded')
+
         self.resize_screen()  # should run only if resized window
 
     def render_splash_screen(self):  # maybe not the best name bc there's a splash_screen.py
@@ -280,6 +291,11 @@ class Engine:
         elif credits and not help_menu:
             draw_credits(self.screen, self.screen_width, self.screen_height)
 
+    def read_recording(self, sim):
+        sim.bodies = self.recording[self.recording_index]
+
+        self.recording_index += 1
+
     def update_buttons(self, paused):
         for button in self.buttons:
             button.update(self.screen, self.screen_width, self.screen_height)
@@ -359,7 +375,12 @@ class Engine:
 
             if sim.calculate_system_energy:
                 sim.kinetic_energy, sim.potential_energy, sim.system_energy = get_system_energy(sim.bodies)
+
         sim.get_system_center_of_mass()
+
+    def record_frame(self, sim):
+        self.recording.append(deepcopy(sim.bodies))
+        draw_recording_message(self.screen, self, RECORDING_TIME)
 
     def set_octrees(self, sim):
         # try to center on universe boundary (it is currently a fourth the volume)

@@ -14,7 +14,8 @@ class Simulation:
                  templates,
                  templates_index,
                  bg_stars_radius: tuple,
-                 save_on_exit: bool = True
+                 save_on_exit: bool = True,
+                 is_recording: bool = False
                  ):
         self.running = True
         self.paused = False
@@ -96,6 +97,8 @@ class Simulation:
                                                 bg_stars_radius[1])
 
         self.save_on_exit = save_on_exit
+
+        self.is_recording = is_recording
 
     def read_template(self):
         self.camera.reset()
