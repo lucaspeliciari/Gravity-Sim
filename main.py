@@ -87,13 +87,13 @@ def main():
 
             engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
 
-        elif game.state == REPLAY:  # TODO make controls (panning, rotation etc) work during recording
-            engine.tick(sim)        # TODO then make it possible to restart recording in a loop
+        elif game.state == REPLAY:
+            engine.tick(sim)
 
             if sim.is_recording:
                 engine.calculate_physics(sim)
                 engine.record_frame(sim)
-            else:
+            elif not sim.paused:
                 engine.read_recording(sim)
                 engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
 

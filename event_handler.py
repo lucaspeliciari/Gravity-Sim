@@ -3,7 +3,7 @@ import sys
 import pygame.display
 from pygame import constants as constant
 
-from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN
+from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, REPLAY
 from file_handler import *
 from functions import mouse_hover
 
@@ -133,6 +133,33 @@ def handle(events,
 
                     if not (pygame.key.get_mods() & constant.KMOD_LCTRL) and event.key == slot_key:
                         pickled_dict = load_universe(f'my_universe_{i}.uni', sim, engine, i)
+
+            if event.type == constant.MOUSEBUTTONDOWN:
+                select_planet(mouse_buttons, mouse_position, engine, sim)
+
+            if event.type == constant.MOUSEMOTION:
+                pass
+
+            if event.type == constant.MOUSEWHEEL:
+                sim.camera.change_zoom(event.y * key_value)
+
+        elif game.state == REPLAY and not sim.is_recording:  # TODO make controls work during replay
+            if event.type == constant.KEYDOWN:
+
+                if event.key == constant.K_PERIOD:
+                    sim.focused_body_index += 1
+                    if sim.focused_body_index > len(sim.bodies) - 1:
+                        sim.focused_body_index = 0
+                if event.key == constant.K_COMMA:
+                    sim.focused_body_index -= 1
+                    if sim.focused_body_index < 0:
+                        sim.focused_body_index = len(sim.bodies) - 1
+
+                if event.key == constant.K_SPACE:
+                    sim.paused = not sim.paused
+
+                if event.key == constant.K_f:
+                    sim.follow_focused_body = not sim.follow_focused_body
 
             if event.type == constant.MOUSEBUTTONDOWN:
                 select_planet(mouse_buttons, mouse_position, engine, sim)

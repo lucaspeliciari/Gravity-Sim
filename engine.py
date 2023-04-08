@@ -20,7 +20,7 @@ from render.trees import *
 from render.universe import *
 
 
-RECORDING_TIME = 10
+RECORDING_TIME = 5  # TODO put this variable somewhere else
 
 class Engine:
     def __init__(self,
