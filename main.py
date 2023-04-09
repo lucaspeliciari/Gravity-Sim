@@ -79,6 +79,10 @@ def main():
             engine.tick(sim)
             engine.render_splash_screen()
 
+        elif game.state == MAIN_MENU:
+            engine.tick(sim)  # is this necessary here?
+            engine.render_main_menu()
+
         elif game.state == SIMULATION:
             engine.tick(sim)
 

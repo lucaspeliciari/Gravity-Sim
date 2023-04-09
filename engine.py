@@ -19,6 +19,8 @@ from render.splash_screen import *
 from render.trees import *
 from render.universe import *
 
+from render.main_menu import *
+
 
 RECORDING_TIME = 5  # TODO put this variable somewhere else
 
@@ -205,7 +207,7 @@ class Engine:
         render_splash_screen(self.screen, self.screen_width, self.screen_height)
 
     def render_main_menu(self):
-        render_main_menu(self.screen, self.screen_width)
+        render_main_menu(self.screen, self.screen_width, self.screen_height)
 
     def __camera_follow(self, sim):
         # works if no rotation
