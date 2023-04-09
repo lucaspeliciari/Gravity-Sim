@@ -3,7 +3,7 @@ import sys
 import pygame.display
 from pygame import constants as constant
 
-from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, RECORDING
+from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, MAIN_MENU, RECORDING, MAIN_MENU_OPTIONS
 from file_handler import *
 from functions import mouse_hover
 
@@ -69,10 +69,30 @@ def handle(events,
                     pygame.display.set_mode((engine.window_screen_width, engine.window_screen_height), pygame.RESIZABLE)
                     engine.screen_mode_flag = pygame.RESIZABLE
 
-        if game.state == SPLASH_SCREEN:
+        '''if game.state == SPLASH_SCREEN:
             if event.type == constant.KEYDOWN or event.type == constant.MOUSEBUTTONDOWN:
-                game.state = SIMULATION
-                engine.timer = 0
+                game.state = MAIN_MENU
+                engine.timer = 0'''
+
+        if game.state == MAIN_MENU:
+            if event.type == constant.KEYDOWN:
+
+                if event.key == constant.K_w or event.key == constant.K_UP:
+                    engine.main_menu_option_index += 1
+                    if engine.main_menu_option_index > len(MAIN_MENU_OPTIONS) - 1:
+                        engine.main_menu_option_index = 0
+                if event.key == constant.K_s or event.key == constant.K_DOWN:
+                    engine.main_menu_option_index -= 1
+                    if engine.main_menu_option_index < 0:
+                        engine.main_menu_option_index = len(MAIN_MENU_OPTIONS) - 1
+
+                if event.key == constant.K_RETURN:
+                    engine.timer = 0
+                    if MAIN_MENU_OPTIONS[engine.main_menu_option_index] == 'Start simulation':
+                        game.state = SIMULATION
+
+                    if MAIN_MENU_OPTIONS[engine.main_menu_option_index] == 'Quit':
+                        game.running = False
 
         elif game.state == SIMULATION:
             if event.type == constant.KEYDOWN:

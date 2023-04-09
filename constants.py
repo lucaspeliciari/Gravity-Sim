@@ -33,12 +33,23 @@ RADIUS_SCALE = 100000  # SCALE FOR RADII ONLY, test different values
 Z_SCALING = 500  # Z = -Z_SCALING is the smallest visual radius for 3D and Z = +Z_SCALING the largest
 MAX_ZOOM = 5000  # not being used, didn't remove this from vars yet
 
+RECORDING_TIME = 10
+
 # UI
 TAB_BUTTON_Y_START = 50
 TAB_BUTTON_SPACING = 30
 TAB_TOGGLE_SPACING = 30
 TAB_BUTTON_TOGGLE_SPACING = 30
 TEMPLATE_TITLE_TIME_ON_SCREEN = 1.75
+
+MAIN_MENU_OPTIONS = [
+        f'Quit',
+        f'Credits',
+        f'Options',
+        f'Start recording',
+        f'Load simulation',
+        f'Start simulation',
+    ]
 
 # PLAY / PAUSE BUTTON ICONS
 play_triangle = ((12, 8),

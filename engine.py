@@ -14,6 +14,7 @@ from classes.messenger import Messenger
 from classes.slider import Slider
 from classes.tab import Tab
 from classes.toggle import Toggle
+from constants import RECORDING_TIME
 from physics import *
 from render.splash_screen import *
 from render.trees import *
@@ -21,8 +22,6 @@ from render.universe import *
 
 from render.main_menu import *
 
-
-RECORDING_TIME = 5  # TODO put this variable somewhere else
 
 class Engine:
     def __init__(self,
@@ -87,6 +86,8 @@ class Engine:
 
         self.recording = []
         self.recording_index = 0
+
+        self.main_menu_option_index = len(MAIN_MENU_OPTIONS) - 1
 
     def reset_values(self):
         self.timescale = 0
@@ -196,7 +197,6 @@ class Engine:
 
         self.current_frame += 1
 
-
         if sim.is_recording and self.timer > RECORDING_TIME:
             sim.is_recording = False
             print(RECORDING_TIME, 'seconds and', len(self.recording), 'frames recorded')
@@ -207,7 +207,7 @@ class Engine:
         render_splash_screen(self.screen, self.screen_width, self.screen_height)
 
     def render_main_menu(self):
-        render_main_menu(self.screen, self.screen_width, self.screen_height)
+        render_main_menu(self.screen, self.screen_width, self.screen_height, self.main_menu_option_index)
 
     def __camera_follow(self, sim):
         # works if no rotation

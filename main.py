@@ -29,7 +29,7 @@ def main():
     sim = Simulation(templates, templates_index, bg_stars_radius, settings['autosave_on_exit'])  # , True
     engine = Engine(sim, window_size, settings['fullscreen'], body_trail_settings, settings['max_messages_in_log'])
     engine.set_octrees(sim)
-    game = Game(state=RECORDING)
+    game = Game(state=SPLASH_SCREEN)
 
     if game.state == RECORDING:
         sim.is_recording = True
@@ -78,6 +78,9 @@ def main():
         if game.state == SPLASH_SCREEN:
             engine.tick(sim)
             engine.render_splash_screen()
+
+            if engine.timer > game.splash_screen_time:
+                game.state = MAIN_MENU
 
         elif game.state == MAIN_MENU:
             engine.tick(sim)  # is this necessary here?

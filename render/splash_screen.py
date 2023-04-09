@@ -25,12 +25,8 @@ def render_splash_screen(screen, engine_screen_width, engine_screen_height):
                 (engine_screen_width // 2 - text_width // 2, 5 * text_height - 10))
 
     font = pygame.font.SysFont("monospace", 25)
-    text = 'Press any key to continue'
-    text_width, text_height = font.size(text)
-    screen.blit(font.render(text, True, WHITE),
-                (engine_screen_width // 2 - text_width // 2, engine_screen_height - 2 * text_height - 10)) # 10 is arbitrary vertical offset
 
-    text = 'Press F1 during simulation for help'
-    text_width, text_height = font.size(text)
-    screen.blit(font.render(text, True, WHITE),
-                (engine_screen_width // 2 - text_width // 2, engine_screen_height - text_height - 10)) # 10 is arbitrary vertical offset
+    # text = 'Press any key to continue'
+    # text_width, text_height = font.size(text)
+    # screen.blit(font.render(text, True, WHITE),
+    #             (engine_screen_width // 2 - text_width // 2, engine_screen_height - 2 * text_height - 10)) # 10 is arbitrary vertical offset
