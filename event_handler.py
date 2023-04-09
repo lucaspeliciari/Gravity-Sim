@@ -3,7 +3,7 @@ import sys
 import pygame.display
 from pygame import constants as constant
 
-from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, REPLAY
+from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, RECORDING
 from file_handler import *
 from functions import mouse_hover
 
@@ -26,7 +26,7 @@ def handle(events,
             pygame.key.get_mods() & constant.KMOD_RSHIFT):
         key_value = 100
 
-    elif game.state == SIMULATION:
+    elif game.state == SIMULATION or game.state == RECORDING:
         keyboard_panning(keys, key_value, sim.camera.zoom_multiplier, sim)
         keyboard_rotation(keys, sim)
         keyboard_zoom(keys, key_value, sim)
@@ -143,8 +143,9 @@ def handle(events,
             if event.type == constant.MOUSEWHEEL:
                 sim.camera.change_zoom(event.y * key_value)
 
-        elif game.state == REPLAY and not sim.is_recording:  # TODO make controls work during replay
+        elif game.state == RECORDING and not sim.is_recording:  # TODO make controls work during replay
             if event.type == constant.KEYDOWN:
+                print('sdgomjhsdfp-omhfsd')
 
                 if event.key == constant.K_PERIOD:
                     sim.focused_body_index += 1

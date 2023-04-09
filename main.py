@@ -29,9 +29,9 @@ def main():
     sim = Simulation(templates, templates_index, bg_stars_radius, settings['autosave_on_exit'])  # , True
     engine = Engine(sim, window_size, settings['fullscreen'], body_trail_settings, settings['max_messages_in_log'])
     engine.set_octrees(sim)
-    game = Game(state=REPLAY)
+    game = Game(state=RECORDING)
 
-    if game.state == REPLAY:
+    if game.state == RECORDING:
         sim.is_recording = True
 
     game.sim = sim
@@ -87,7 +87,7 @@ def main():
 
             engine.render_simulation(events, sim, mouse_buttons, mouse_position, game.help, game.credits)
 
-        elif game.state == REPLAY:
+        elif game.state == RECORDING:
             engine.tick(sim)
 
             if sim.is_recording:
