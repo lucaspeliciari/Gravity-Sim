@@ -3,7 +3,7 @@ import sys
 import pygame.display
 from pygame import constants as constant
 
-from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, MAIN_MENU, RECORDING, MAIN_MENU_OPTIONS
+from constants import MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT, SIMULATION, SPLASH_SCREEN, MAIN_MENU, RECORDING, MAIN_MENU_OPTIONS, OPTIONS, CREDITS
 from file_handler import *
 from functions import mouse_hover
 
@@ -53,7 +53,7 @@ def handle(events,
         if event.type == constant.USEREVENT:
             engine.root.update(sim.bodies)
 
-        if event.type == constant.KEYDOWN:
+        if event.type == constant.KEYDOWN:  # TODO clean up menu selection (or at least use a switch or something (switch / dict with functions as values?))
             if event.key == constant.K_ESCAPE:
                 if sim.save_on_exit:
                     save_universe('autosave.uni', sim, engine)
@@ -69,30 +69,60 @@ def handle(events,
                     pygame.display.set_mode((engine.window_screen_width, engine.window_screen_height), pygame.RESIZABLE)
                     engine.screen_mode_flag = pygame.RESIZABLE
 
-        '''if game.state == SPLASH_SCREEN:
-            if event.type == constant.KEYDOWN or event.type == constant.MOUSEBUTTONDOWN:
+        if game.state == SPLASH_SCREEN:
+            if event.type == constant.KEYDOWN or event.type == constant.MOUSEBUTTONDOWN:  # TODO ends up pressing key to skip splash screen also in main menu, so pressing enter will immediately press 'Start simulation'
                 game.state = MAIN_MENU
-                engine.timer = 0'''
+                engine.timer = 0
 
         if game.state == MAIN_MENU:
             if event.type == constant.KEYDOWN:
 
                 if event.key == constant.K_w or event.key == constant.K_UP:
-                    engine.main_menu_option_index += 1
-                    if engine.main_menu_option_index > len(MAIN_MENU_OPTIONS) - 1:
-                        engine.main_menu_option_index = 0
+                    engine.option_index += 1
+                    if engine.option_index > len(MAIN_MENU_OPTIONS) - 1:
+                        engine.option_index = 0
                 if event.key == constant.K_s or event.key == constant.K_DOWN:
-                    engine.main_menu_option_index -= 1
-                    if engine.main_menu_option_index < 0:
-                        engine.main_menu_option_index = len(MAIN_MENU_OPTIONS) - 1
+                    engine.option_index -= 1
+                    if engine.option_index < 0:
+                        engine.option_index = len(MAIN_MENU_OPTIONS) - 1
+
+                if (MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording') and (event.key == constant.K_d or event.key == constant.K_RIGHT):
+                    sim.template_index += 1
+                    if sim.template_index > len(MAIN_MENU_OPTIONS) - 1:
+                        sim.template_index = 0
+                if (MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording') and (event.key == constant.K_a or event.key == constant.K_LEFT):
+                    sim.template_index -= 1
+                    if sim.template_index < 0:
+                        sim.template_index = len(MAIN_MENU_OPTIONS) - 1
 
                 if event.key == constant.K_RETURN:
-                    engine.timer = 0
-                    if MAIN_MENU_OPTIONS[engine.main_menu_option_index] == 'Start simulation':
+
+                    if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation':
+                        game.state = SIMULATION
+                        sim.read_template()
+                        engine.reset_values()
+
+                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Load simulation':
+                        # TODO actually load previous save file
                         game.state = SIMULATION
 
-                    if MAIN_MENU_OPTIONS[engine.main_menu_option_index] == 'Quit':
+                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Start recording':
+                        game.state = RECORDING
+                        sim.is_recording = True
+                        sim.read_template()
+                        engine.reset_values()
+
+                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Options':
+                        game.state = OPTIONS
+
+                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Credits':
+                        game.state = CREDITS
+
+                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Quit':
                         game.running = False
+
+                    engine.timer = 0  # check if this line will cause unforeseen consequences
+                    engine.option_index = 0
 
         elif game.state == SIMULATION:
             if event.type == constant.KEYDOWN:
@@ -163,9 +193,8 @@ def handle(events,
             if event.type == constant.MOUSEWHEEL:
                 sim.camera.change_zoom(event.y * key_value)
 
-        elif game.state == RECORDING and not sim.is_recording:  # TODO make controls work during replay
+        elif game.state == RECORDING and not sim.is_recording:
             if event.type == constant.KEYDOWN:
-                print('sdgomjhsdfp-omhfsd')
 
                 if event.key == constant.K_PERIOD:
                     sim.focused_body_index += 1

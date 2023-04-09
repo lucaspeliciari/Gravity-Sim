@@ -16,8 +16,10 @@ MIN_SCREEN_HEIGHT = 480
 # GAMES STATES
 SPLASH_SCREEN = 0
 MAIN_MENU = 1
-SIMULATION = 2
-RECORDING = 3
+OPTIONS = 2
+CREDITS = 3
+SIMULATION = 4
+RECORDING = 5
 
 # ENGINE
 FRAMERATE = 60
@@ -50,6 +52,12 @@ MAIN_MENU_OPTIONS = [
         f'Load simulation',
         f'Start simulation',
     ]
+
+DEFAULT_SETTINGS = {"first_run": 1, "state": 0, "windowed_res_x": 800, "windowed_res_Y": 600, "fullscreen": 1,
+                    "number_random_bodies": 0, "trail_interval": 1000, "max_trail_length": 100,
+                    "min_distance_to_trail": 3, "layers_bg_stars": 6, "bg_stars_per_layer": 150,
+                    "bg_star_avg_radius": 20, "bg_star_radius_deviation": 10, "start_template_index": 1,
+                    "autosave_on_exit": 1, "autoload_on_start": 1, "max_messages_in_log": 16}
 
 # PLAY / PAUSE BUTTON ICONS
 play_triangle = ((12, 8),

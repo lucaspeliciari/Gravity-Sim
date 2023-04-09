@@ -2,14 +2,14 @@ import json
 import os
 import pickle
 
-from constants import RED
+from constants import RED, DEFAULT_SETTINGS
 
 
-default_settings = {"first_run": 1, "state": 0, "windowed_res_x": 800, "windowed_res_Y": 600, "fullscreen": 1,
-                    "number_random_bodies": 0, "trail_interval": 1000, "max_trail_length": 100,
-                    "min_distance_to_trail": 3, "layers_bg_stars": 6, "bg_stars_per_layer": 150,
-                    "bg_star_avg_radius": 20, "bg_star_radius_deviation": 10, "start_template_index": 1,
-                    "autosave_on_exit": 1, "autoload_on_start": 1, "max_messages_in_log": 16}
+# default_settings = {"first_run": 1, "state": 0, "windowed_res_x": 800, "windowed_res_Y": 600, "fullscreen": 1,
+#                     "number_random_bodies": 0, "trail_interval": 1000, "max_trail_length": 100,
+#                     "min_distance_to_trail": 3, "layers_bg_stars": 6, "bg_stars_per_layer": 150,
+#                     "bg_star_avg_radius": 20, "bg_star_radius_deviation": 10, "start_template_index": 1,
+#                     "autosave_on_exit": 1, "autoload_on_start": 1, "max_messages_in_log": 16}
 
 
 # restore default settings if something went wrong with settings.json, probably overkill
@@ -20,7 +20,7 @@ def check_settings():
         print('Can\'t find settings.json\nDefault settings restored')
         return 1
     else:
-        for setting, default_setting in zip(settings, default_settings):
+        for setting, default_setting in zip(settings, DEFAULT_SETTINGS):
             if setting != default_setting:  # order shouldn't matter, fix
                 restore_default_settings()
                 print('Something is wrong with settings.json\nDefault settings restored')

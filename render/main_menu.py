@@ -3,7 +3,7 @@ import pygame.draw
 from functions import *
 
 
-def render_main_menu(screen, engine_screen_width, engine_screen_height, option_index):
+def render_main_menu(screen, engine_screen_width, engine_screen_height, option_index, template_index, template_name):
     screen.fill(BLACK)
 
     title_font = pygame.font.SysFont("monospace", 100, bold=True)
@@ -16,17 +16,14 @@ def render_main_menu(screen, engine_screen_width, engine_screen_height, option_i
 
     font = pygame.font.SysFont("monospace", 25)
 
-    # main_menu_texts = [
-    #     f'Quit',
-    #     f'Credits',
-    #     f'Options',
-    #     f'Load simulation',
-    #     f'Start simulation',
-    # ]
     MARGIN = 3
 
     for i, text in enumerate(MAIN_MENU_OPTIONS):
         text_width, text_height = font.size(text)
+
+        # if text == 'Start simulation':
+        # if MAIN_MENU_OPTIONS[i] == 'Start simulation' or MAIN_MENU_OPTIONS[i] == 'Start recording':
+        #     text += f': {template_name}'
 
         if i == option_index:
             pygame.draw.rect(screen,
@@ -36,6 +33,8 @@ def render_main_menu(screen, engine_screen_width, engine_screen_height, option_i
                               text_width + MARGIN * 2,
                               text_height),
                              1)
+            if MAIN_MENU_OPTIONS[i] == 'Start simulation' or MAIN_MENU_OPTIONS[i] == 'Start recording':
+                text += f': {template_name}'
 
         screen.blit(font.render(text, True, WHITE), (engine_screen_width // 2 - text_width // 2, engine_screen_height // 2 - (i + 1) * text_height))
 
@@ -43,7 +42,17 @@ def render_main_menu(screen, engine_screen_width, engine_screen_height, option_i
     text_width, text_height = font.size(text)
     screen.blit(font.render(text, True, WHITE), (0, engine_screen_height - text_height))
 
+    explanation_texts = [
+        'Press left / right or A / D to select template for new simulation',
+        'Press enter to select highlighted option',
+        'Press up / down or W / A to highlight option',
+    ]
+    for i, text in enumerate(explanation_texts):
+        text_width, text_height = font.size(text)
+        screen.blit(font.render(text, True, WHITE),
+                    (engine_screen_width // 2 - text_width // 2, engine_screen_height - text_height - (i + 1) * text_height))
+
     text = 'Press F1 during simulation for help'
     text_width, text_height = font.size(text)
     screen.blit(font.render(text, True, WHITE),
-                (engine_screen_width // 2 - text_width // 2, engine_screen_height - text_height - 10))  # 10 is arbitrary vertical offset
+                (engine_screen_width // 2 - text_width // 2, engine_screen_height - text_height))

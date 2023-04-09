@@ -14,8 +14,9 @@ from classes.messenger import Messenger
 from classes.slider import Slider
 from classes.tab import Tab
 from classes.toggle import Toggle
-from constants import RECORDING_TIME
+# from constants import RECORDING_TIME
 from physics import *
+from render.options import render_options_menu
 from render.splash_screen import *
 from render.trees import *
 from render.universe import *
@@ -87,7 +88,7 @@ class Engine:
         self.recording = []
         self.recording_index = 0
 
-        self.main_menu_option_index = len(MAIN_MENU_OPTIONS) - 1
+        self.option_index = len(MAIN_MENU_OPTIONS) - 1
 
     def reset_values(self):
         self.timescale = 0
@@ -206,8 +207,15 @@ class Engine:
     def render_splash_screen(self):  # maybe not the best name bc there's a splash_screen.py
         render_splash_screen(self.screen, self.screen_width, self.screen_height)
 
-    def render_main_menu(self):
-        render_main_menu(self.screen, self.screen_width, self.screen_height, self.main_menu_option_index)
+    def render_main_menu(self, template_index, template_name):
+        render_main_menu(self.screen, self.screen_width, self.screen_height, self.option_index, template_index, template_name)
+
+    def render_options_menu(self):
+        render_options_menu(self.screen, self.font, self.screen_width, self.screen_height, self.option_index)
+
+    def render_credits(self):
+        # use the popup from simulation?
+        ...
 
     def __camera_follow(self, sim):
         # works if no rotation

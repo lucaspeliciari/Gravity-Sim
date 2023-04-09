@@ -75,7 +75,7 @@ def main():
         joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
         event_handler.handle(events, mouse_position, keys, mouse_buttons, joysticks, game, sim, engine)
 
-        if game.state == SPLASH_SCREEN:
+        if game.state == SPLASH_SCREEN:  # TODO replace with switch
             engine.tick(sim)
             engine.render_splash_screen()
 
@@ -84,7 +84,11 @@ def main():
 
         elif game.state == MAIN_MENU:
             engine.tick(sim)  # is this necessary here?
-            engine.render_main_menu()
+            engine.render_main_menu(sim.template_index, sim.templates[sim.template_index].name)
+
+        elif game.state == OPTIONS:
+            engine.tick(sim)
+            engine.render_options_menu()
 
         elif game.state == SIMULATION:
             engine.tick(sim)
