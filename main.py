@@ -52,7 +52,12 @@ def main():
 
     if check_saves():
         engine.messenger.add('Save folder not found', color=RED, message_time=10, font_size=red_font_size, sticky=True)
-        engine.messenger.add('Created a new folder', color=RED, message_time=10, font_size=red_font_size, sticky=True)
+        engine.messenger.add('Created a new save folder', color=RED, message_time=10, font_size=red_font_size, sticky=True)
+        engine.messenger.add('', color=RED, message_time=10, font_size=red_font_size, sticky=True)
+
+    if check_recordings():
+        engine.messenger.add('Recordings folder not found', color=RED, message_time=10, font_size=red_font_size, sticky=True)
+        engine.messenger.add('Created a new recordings folder', color=RED, message_time=10, font_size=red_font_size, sticky=True)
         engine.messenger.add('', color=RED, message_time=10, font_size=red_font_size, sticky=True)
 
     yellow_font_size = 25

@@ -14,7 +14,7 @@ from classes.messenger import Messenger
 from classes.slider import Slider
 from classes.tab import Tab
 from classes.toggle import Toggle
-# from constants import RECORDING_TIME
+from file_handler import save_recording, load_recording
 from physics import *
 from render.options import render_options_menu
 from render.splash_screen import *
@@ -201,6 +201,8 @@ class Engine:
         if sim.is_recording and self.timer > RECORDING_TIME:
             sim.is_recording = False
             print(RECORDING_TIME, 'seconds and', len(self.recording), 'frames recorded')
+            save_recording(sim.templates[sim.template_index].name, sim.bodies)
+            self.timer = 0
 
         self.resize_screen()  # should run only if resized window
 

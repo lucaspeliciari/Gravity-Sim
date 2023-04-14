@@ -21,6 +21,7 @@ def handle(events,
            sim,
            engine
            ):
+
     key_value = 1
     if keys[pygame.K_RSHIFT] or keys[pygame.K_LSHIFT] or (pygame.key.get_mods() & constant.KMOD_LSHIFT) or (
             pygame.key.get_mods() & constant.KMOD_RSHIFT):
@@ -53,7 +54,7 @@ def handle(events,
         if event.type == constant.USEREVENT:
             engine.root.update(sim.bodies)
 
-        if event.type == constant.KEYDOWN:  # TODO clean up menu selection (or at least use a switch or something (switch / dict with functions as values?))
+        if event.type == constant.KEYDOWN:  # TODO clean up menu selection
             if event.key == constant.K_ESCAPE:
                 if sim.save_on_exit:
                     save_universe('autosave.uni', sim, engine)
@@ -88,12 +89,12 @@ def handle(events,
 
                 if (MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording') and (event.key == constant.K_d or event.key == constant.K_RIGHT):
                     sim.template_index += 1
-                    if sim.template_index > len(MAIN_MENU_OPTIONS) - 1:
+                    if sim.template_index > len(sim.templates) - 1:
                         sim.template_index = 0
                 if (MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording') and (event.key == constant.K_a or event.key == constant.K_LEFT):
                     sim.template_index -= 1
                     if sim.template_index < 0:
-                        sim.template_index = len(MAIN_MENU_OPTIONS) - 1
+                        sim.template_index = len(sim.templates) - 1
 
                 if event.key == constant.K_RETURN:
 
@@ -103,7 +104,7 @@ def handle(events,
                         engine.reset_values()
 
                     if MAIN_MENU_OPTIONS[engine.option_index] == 'Load simulation':
-                        # TODO actually load previous save file
+                        load_universe('autosave.uni', sim, engine)
                         game.state = SIMULATION
 
                     if MAIN_MENU_OPTIONS[engine.option_index] == 'Start recording':

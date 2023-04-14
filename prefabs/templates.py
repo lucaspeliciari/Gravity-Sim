@@ -110,6 +110,8 @@ keplerian_orbits = Template(keplerian_list, name='Keplerian Orbits',
 
 free_for_all = Template(template_data[-3], name='Free For All')
 
+stress_test = Template([earth_debug, moon_orbital_1, moon_orbital_2, moon_orbital_3, moon_orbital_4, moon_orbital_5, moon_orbital_6, moon5, moon6, moon7, moon8, moon9], name='Stress Test')
+
 
 randoms_only = Template(template_data[0], name='Random Planets', number_random_bodies=5,
                         starting_camera_zoom=-4, orbit_first_body=False, collisions=False)
@@ -121,5 +123,6 @@ templates = [solar_system,
              cool_pattern,
              keplerian_orbits,
              free_for_all,
+             stress_test,
              test_system,
              randoms_only]

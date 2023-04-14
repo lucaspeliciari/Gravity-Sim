@@ -62,6 +62,17 @@ def check_saves():
         return 1
 
 
+def check_recordings():
+    path = os.getcwd() + '\\recordings\\'
+    if os.path.isdir(path):
+        print('Recordings folder already exists')
+        return 0
+    else:
+        print('Recordings folder does not exist')
+        os.mkdir(path)
+        print('Created recordings folder')
+        return 1
+
 def save_universe(file_name, sim, engine):
     with open(f'{os.getcwd()}\\saves\\{file_name}', 'wb') as file:
         pickled_dict = {'bodies': sim.bodies, 'timescale': sim.timescale, 'real_time': engine.timer,
@@ -123,3 +134,19 @@ def load_universe(file_name, sim, engine, slot: int = 0):
     else:
         engine.messenger.add(f'Saved universe in slot {slot} has been loaded', 3)
     return 0
+
+
+def save_recording(file_name, bodies):
+    with open(f'{os.getcwd()}\\recordings\\{file_name}.rec', 'wb') as file:
+        pickle.dump(bodies, file)
+
+
+def load_recording(file_name, engine, sim):  # only pass messenger instead of engine?
+    try:
+        file = open(f'{os.getcwd()}\\saves\\{file_name}', 'rb')
+        pickled_bodies = pickle.load(file)
+        sim.bodies = pickled_bodies  # check if this needs the deepcopy as well
+
+    except FileNotFoundError:
+        engine.messenger.add('Recording not found')
+
