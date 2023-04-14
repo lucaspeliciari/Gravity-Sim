@@ -48,6 +48,7 @@ MAIN_MENU_OPTIONS = [
         f'Quit',
         f'Credits',
         f'Options',
+        f'Load recording',
         f'Start recording',
         f'Load simulation',
         f'Start simulation',

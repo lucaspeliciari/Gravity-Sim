@@ -87,14 +87,27 @@ def handle(events,
                     if engine.option_index < 0:
                         engine.option_index = len(MAIN_MENU_OPTIONS) - 1
 
-                if (MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording') and (event.key == constant.K_d or event.key == constant.K_RIGHT):
-                    sim.template_index += 1
-                    if sim.template_index > len(sim.templates) - 1:
-                        sim.template_index = 0
-                if (MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording') and (event.key == constant.K_a or event.key == constant.K_LEFT):
-                    sim.template_index -= 1
-                    if sim.template_index < 0:
-                        sim.template_index = len(sim.templates) - 1
+                if event.key == constant.K_d or event.key == constant.K_RIGHT:
+                    if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording':
+                        sim.template_index += 1
+                        if sim.template_index > len(sim.templates) - 1:
+                            sim.template_index = 0
+
+                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Load recording':
+                        engine.save_index += 1
+                        if engine.save_index > len(sim.templates) - 1:  # TODO get number of saves in folder and use that as max value
+                            engine.save_index = 0
+
+                if event.key == constant.K_a or event.key == constant.K_LEFT:
+                    if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording':
+                        sim.template_index -= 1
+                        if sim.template_index < 0:
+                            sim.template_index = len(sim.templates) - 1
+
+                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Load recording':
+                        engine.save_index -= 1
+                        if engine.save_index < 0:
+                            engine.save_index = len(sim.templates) - 1  # TODO get number of saves in folder and use that as max value
 
                 if event.key == constant.K_RETURN:
 
@@ -103,7 +116,7 @@ def handle(events,
                         sim.read_template()
                         engine.reset_values()
 
-                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Load simulation':
+                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Load simulation':  # TODO make this load selected save slot instead of autosave
                         load_universe('autosave.uni', sim, engine)
                         game.state = SIMULATION
 
