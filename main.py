@@ -76,7 +76,7 @@ def main():
         events = pygame.event.get()
         mouse_position = pygame.mouse.get_pos()
         keys = pygame.key.get_pressed()
-        mouse_buttons = pygame.mouse.get_pressed()
+        mouse_buttons = pygame.mouse.get_pressed(5)  # this gets passed as an event, so probably not necessary
         joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
         event_handler.handle(events, mouse_position, keys, mouse_buttons, joysticks, game, sim, engine)
 

@@ -22,6 +22,66 @@ def handle(events,
            engine
            ):
 
+    def select_option():
+        if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation':
+            game.state = SIMULATION
+            sim.read_template()
+            engine.reset_values()
+
+        if MAIN_MENU_OPTIONS[engine.option_index] == 'Load simulation':
+            save_index = engine.save_names[engine.save_names_index][-1:]
+            load_universe(f'my_universe_{save_index}.uni', sim, engine, save_index)
+            game.state = SIMULATION
+
+        if MAIN_MENU_OPTIONS[engine.option_index] == 'Start recording':
+            game.state = RECORDING
+            sim.is_recording = True
+            sim.read_template()
+            engine.reset_values()
+
+        if MAIN_MENU_OPTIONS[engine.option_index] == 'Load recording':
+            ...
+
+        if MAIN_MENU_OPTIONS[engine.option_index] == 'Options':
+            game.state = OPTIONS
+
+        if MAIN_MENU_OPTIONS[engine.option_index] == 'Credits':
+            game.state = CREDITS
+
+        if MAIN_MENU_OPTIONS[engine.option_index] == 'Quit':
+            game.running = False
+
+        engine.timer = 0  # check if this line will cause unforeseen consequences
+        engine.option_index = 0
+
+    def iterate_option_index(index):
+        engine.option_index += index
+        if engine.option_index < 0:
+            engine.option_index = len(MAIN_MENU_OPTIONS) - 1
+        elif engine.option_index > len(MAIN_MENU_OPTIONS) - 1:
+            engine.option_index = 0
+
+    def iterate_template_index(index):
+        sim.template_index += index
+        if sim.template_index > len(sim.templates) - 1:
+            sim.template_index = 0
+        elif sim.template_index < 0:
+            sim.template_index = len(sim.templates) - 1
+
+    def iterate_save_names_index(index):
+        engine.save_names_index += index
+        if engine.save_names_index > len(engine.save_names) - 1:
+            engine.save_names_index = 0
+        elif engine.save_names_index < 0:
+            engine.save_names_index = len(engine.save_names) - 1
+
+    def iterate_recording_names_index(index):
+        engine.recording_names_index += index
+        if engine.recording_names_index > len(engine.recording_names) - 1:
+            engine.recording_names_index = 0
+        elif engine.recording_names_index > len(engine.recording_names) - 1:
+            engine.recording_names_index = 0
+
     key_value = 1
     if keys[pygame.K_RSHIFT] or keys[pygame.K_LSHIFT] or (pygame.key.get_mods() & constant.KMOD_LSHIFT) or (
             pygame.key.get_mods() & constant.KMOD_RSHIFT):
@@ -50,6 +110,16 @@ def handle(events,
             game.holding_rmb = False
             game.first_click_on_widget[2] = False
 
+        if mouse_buttons[3]:
+            engine.option_index += 1
+            if engine.option_index > len(MAIN_MENU_OPTIONS) - 1:
+                engine.option_index = 0
+
+        if mouse_buttons[4]:
+            engine.option_index -= 1
+            if engine.option_index < 0:
+                engine.option_index = len(MAIN_MENU_OPTIONS) - 1
+
     for event in events:
         if event.type == constant.USEREVENT:
             engine.root.update(sim.bodies)
@@ -59,7 +129,12 @@ def handle(events,
                 if sim.save_on_exit:
                     save_universe('autosave.uni', sim, engine)
                     print('Autosaved')
-                sys.exit('Quitting')
+
+                # sys.exit('Quitting')
+
+                if game.state != MAIN_MENU:
+                    game.state = MAIN_MENU
+
             if event.key == constant.K_f or (
                     (pygame.key.get_mods() & constant.KMOD_LALT) and event.key == constant.K_RETURN):
                 if engine.screen_mode_flag == pygame.RESIZABLE:
@@ -76,67 +151,44 @@ def handle(events,
                 engine.timer = 0
 
         if game.state == MAIN_MENU:
+
             if event.type == constant.KEYDOWN:
 
                 if event.key == constant.K_w or event.key == constant.K_UP:
-                    engine.option_index += 1
-                    if engine.option_index > len(MAIN_MENU_OPTIONS) - 1:
-                        engine.option_index = 0
+                    iterate_option_index(1)
+
                 if event.key == constant.K_s or event.key == constant.K_DOWN:
-                    engine.option_index -= 1
-                    if engine.option_index < 0:
-                        engine.option_index = len(MAIN_MENU_OPTIONS) - 1
+                    iterate_option_index(-1)
 
                 if event.key == constant.K_d or event.key == constant.K_RIGHT:
                     if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording':
-                        sim.template_index += 1
-                        if sim.template_index > len(sim.templates) - 1:
-                            sim.template_index = 0
+                        iterate_template_index(1)
 
-                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Load recording':
-                        engine.save_index += 1
-                        if engine.save_index > len(sim.templates) - 1:  # TODO get number of saves in folder and use that as max value
-                            engine.save_index = 0
+                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load simulation':
+                        iterate_save_names_index(1)
+
+                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load recording':
+                        iterate_recording_names_index(1)
 
                 if event.key == constant.K_a or event.key == constant.K_LEFT:
                     if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Start recording':
-                        sim.template_index -= 1
-                        if sim.template_index < 0:
-                            sim.template_index = len(sim.templates) - 1
+                        iterate_template_index(-1)
 
-                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load simulation' or MAIN_MENU_OPTIONS[engine.option_index] == f'Load recording':
-                        engine.save_index -= 1
-                        if engine.save_index < 0:
-                            engine.save_index = len(sim.templates) - 1  # TODO get number of saves in folder and use that as max value
+                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load simulation':
+                        iterate_save_names_index(-1)
+
+                    elif MAIN_MENU_OPTIONS[engine.option_index] == f'Load recording':
+                        iterate_recording_names_index(-1)
 
                 if event.key == constant.K_RETURN:
+                    select_option()
 
-                    if MAIN_MENU_OPTIONS[engine.option_index] == f'Start simulation':
-                        game.state = SIMULATION
-                        sim.read_template()
-                        engine.reset_values()
+            if event.type == constant.MOUSEWHEEL:
+                iterate_option_index(event.y)
 
-                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Load simulation':  # TODO make this load selected save slot instead of autosave
-                        load_universe('autosave.uni', sim, engine)
-                        game.state = SIMULATION
-
-                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Start recording':
-                        game.state = RECORDING
-                        sim.is_recording = True
-                        sim.read_template()
-                        engine.reset_values()
-
-                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Options':
-                        game.state = OPTIONS
-
-                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Credits':
-                        game.state = CREDITS
-
-                    if MAIN_MENU_OPTIONS[engine.option_index] == 'Quit':
-                        game.running = False
-
-                    engine.timer = 0  # check if this line will cause unforeseen consequences
-                    engine.option_index = 0
+            if event.type == constant.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    select_option()
 
         elif game.state == SIMULATION:
             if event.type == constant.KEYDOWN:

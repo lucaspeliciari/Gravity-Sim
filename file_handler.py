@@ -73,6 +73,7 @@ def check_recordings():
         print('Created recordings folder')
         return 1
 
+
 def save_universe(file_name, sim, engine):
     with open(f'{os.getcwd()}\\saves\\{file_name}', 'wb') as file:
         pickled_dict = {'bodies': sim.bodies, 'timescale': sim.timescale, 'real_time': engine.timer,
@@ -150,3 +151,14 @@ def load_recording(file_name, engine, sim):  # only pass messenger instead of en
     except FileNotFoundError:
         engine.messenger.add('Recording not found')
 
+
+def get_file_names(folder):
+    names = []
+
+    allowed_file_extensions = ['.uni', '.rec']
+    for filename in os.listdir(f'{os.getcwd()}\\{folder}'):
+        file_extension = filename[-4:]
+        if file_extension in allowed_file_extensions and not 'auto' in filename:
+            names.append(filename[:-4])
+
+    return names

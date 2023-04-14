@@ -3,7 +3,7 @@ import pygame.draw
 from functions import *
 
 
-def render_main_menu(screen, engine_screen_width, engine_screen_height, option_index, template_index, template_name, save_index):
+def render_main_menu(screen, engine_screen_width, engine_screen_height, option_index, template_index, template_name, save_name, recording_name):
     screen.fill(BLACK)
 
     title_font = pygame.font.SysFont("monospace", 100, bold=True)
@@ -35,10 +35,13 @@ def render_main_menu(screen, engine_screen_width, engine_screen_height, option_i
                              1)
 
             if MAIN_MENU_OPTIONS[i] == 'Start simulation' or MAIN_MENU_OPTIONS[i] == 'Start recording':
-                text += f': {template_name}'
+                text += f' {template_name}'
 
-            elif MAIN_MENU_OPTIONS[i] == 'Load simulation' or MAIN_MENU_OPTIONS[i] == 'Load recording':
-                text += f': {save_index}'
+            elif MAIN_MENU_OPTIONS[i] == 'Load simulation':
+                text += f' {save_name}'
+
+            elif MAIN_MENU_OPTIONS[i] == 'Load recording':
+                text += f' {recording_name}'
 
         screen.blit(font.render(text, True, WHITE), (engine_screen_width // 2 - text_width // 2, engine_screen_height // 2 - (i + 1) * text_height))
 

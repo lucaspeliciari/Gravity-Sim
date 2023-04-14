@@ -14,7 +14,7 @@ from classes.messenger import Messenger
 from classes.slider import Slider
 from classes.tab import Tab
 from classes.toggle import Toggle
-from file_handler import save_recording, load_recording
+from file_handler import save_recording, load_recording, get_file_names
 from physics import *
 from render.options import render_options_menu
 from render.splash_screen import *
@@ -90,7 +90,11 @@ class Engine:
 
         self.option_index = len(MAIN_MENU_OPTIONS) - 1
 
-        self.save_index = 1  # TODO use this to select saved universe or recording to load directly from main menu
+        self.save_names_index = 0
+        self.save_names = get_file_names('saves')
+
+        self.recording_names_index = 0
+        self.recording_names = get_file_names('recordings')
 
     def reset_values(self):
         self.timescale = 0
@@ -212,7 +216,7 @@ class Engine:
         render_splash_screen(self.screen, self.screen_width, self.screen_height)
 
     def render_main_menu(self, template_index, template_name):
-        render_main_menu(self.screen, self.screen_width, self.screen_height, self.option_index, template_index, template_name, self.save_index)
+        render_main_menu(self.screen, self.screen_width, self.screen_height, self.option_index, template_index, template_name, self.save_names[self.save_names_index], self.recording_names[self.recording_names_index])
 
     def render_options_menu(self):
         render_options_menu(self.screen, self.font, self.screen_width, self.screen_height, self.option_index)
