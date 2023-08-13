@@ -143,7 +143,7 @@ def handle(events,
             if event.type == constant.MOUSEWHEEL:
                 sim.camera.change_zoom(event.y * key_value)
 
-        elif game.state == RECORDING and not sim.is_recording:  # TODO make controls work during replay
+        elif game.state == RECORDING and not sim.is_recording:
             if event.type == constant.KEYDOWN:
                 print('sdgomjhsdfp-omhfsd')
 

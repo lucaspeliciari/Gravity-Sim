@@ -22,7 +22,7 @@ from render.universe import *
 from render.main_menu import *
 
 
-RECORDING_TIME = 5  # TODO put this variable somewhere else
+RECORDING_TIME = 1 # TODO put this variable somewhere else
 
 class Engine:
     def __init__(self,

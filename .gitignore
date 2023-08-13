@@ -5,5 +5,7 @@
 .idea/shelf
 /venv/
 /*.json
-/kanban.txt
+/notes.txt
 /saves/
+__pycache__/
+
